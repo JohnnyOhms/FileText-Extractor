@@ -2,7 +2,8 @@ import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import { Home } from "./pages/home";
 import { Profile } from "./pages/profile";
-import styled from "styled-component";
+
+import styled from "styled-components";
 
 const Container = styled.div`
   background-color: black;

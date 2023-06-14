@@ -2,7 +2,7 @@ import express from "express";
 import React from "react";
 import ReactDomServer from "react-dom/server";
 import { StaticRouter } from "react-router-dom/server";
-import { ServerStyledSheet } from "styled-component";
+import { ServerStyleSheet } from "styled-components";
 import path from "path";
 import fs from "fs";
 import App from "./src/App";
@@ -10,6 +10,7 @@ import App from "./src/App";
 const app = express();
 
 app.use(express.static("./build", { index: false }));
+const style = new ServerStyleSheet();
 
 app.get("/*", (req, res) => {
   const reactApp = ReactDomServer.renderToString(
@@ -25,7 +26,9 @@ app.get("/*", (req, res) => {
     }
 
     return res.send(
-      data.replace("<div id='root'></div>", `<div id='root'>${reactApp}</div>`)
+      data
+        .replace("<div id='root'></div>", `<div id='root'>${reactApp}</div>`)
+        .replace("{{style}}", style.getStyleTags())
     );
   });
 });
