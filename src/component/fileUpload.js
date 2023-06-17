@@ -12,7 +12,7 @@ export const FileUpload = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("imgUpload", image);
-    axios.post("http://localhost:8080/api/upload", formData, {}).then((res) => {
+    axios.get("http://localhost:9000", {}).then((res) => {
       console.log(res);
     });
   };

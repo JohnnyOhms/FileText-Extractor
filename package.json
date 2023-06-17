@@ -25,7 +25,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "serve": "npx nodemon --exec babel-node server.js",
+    "serve": "npx nodemon --exec babel-node server.rend.js",
+    "server": "nodemon server.dev.js",
     "watch": "npm-watch"
   },
   "watch": {
