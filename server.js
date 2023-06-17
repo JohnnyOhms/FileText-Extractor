@@ -5,12 +5,14 @@ import { StaticRouter } from "react-router-dom/server";
 import { ServerStyleSheet } from "styled-components";
 import path from "path";
 import fs from "fs";
+import Tesseract from "tesseract.js";
 import App from "./src/App";
 
 const app = express();
 
 app.use(express.static("./build", { index: false }));
 const style = new ServerStyleSheet();
+const img = fs.readFileSync("./image2.png");
 
 app.get("/*", (req, res) => {
   const reactApp = ReactDomServer.renderToString(
@@ -31,6 +33,16 @@ app.get("/*", (req, res) => {
         .replace("{{style}}", style.getStyleTags())
     );
   });
+});
+
+app.get("/api/extract", (req, res) => {
+  Tesseract.recognize(img, "eng", { logger: (m) => console.log(m) })
+    .then((d) => {
+      console.log(d);
+      res.send(`<p>${d.data.hocr}</p>`);
+    })
+    .catch((err) => console.log(err))
+    .finally((c) => console.log(c));
 });
 
 app.listen(8080, () => {
