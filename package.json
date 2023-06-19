@@ -55,6 +55,7 @@
     "@babel/node": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-react": "^7.22.5",
+    "http-status": "^1.6.2",
     "nodemon": "^2.0.22",
     "npm-watch": "^0.11.0",
     "tesseract.js": "^4.1.0"

@@ -1,7 +1,7 @@
 const express = require("express");
 const Router = express.Router();
-const { imgUpload } = require("../controllers/index");
+const { extractText } = require("../controllers/index");
 
-Router.route("/upload").post(imgUpload);
+Router.route("/extract").post(extractText);
 
 module.exports = Router;

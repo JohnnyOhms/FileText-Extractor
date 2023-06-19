@@ -13,11 +13,6 @@ const extractText = (req, res) => {
     .catch((err) => console.log(err));
 };
 
-const imgUpload = (req, res) => {
-  res.statusCode(statusCode.ACCEPTED).send("uploaded sucessfully");
-};
-
 module.exports = {
   extractText,
-  imgUpload,
 };
