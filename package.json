@@ -10,13 +10,18 @@
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "express": "^4.18.2",
+    "express-session": "^1.17.3",
+    "http-status": "^1.6.2",
     "multer": "^1.4.5-lts.1",
-    "node-tesseract-ocr": "^2.2.1",
+    "mysql": "^2.18.1",
+    "passport": "^0.6.0",
+    "passport-local": "^1.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.12.1",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.10",
+    "tesseract.js": "^4.1.0",
     "uuid": "^3.4.0",
     "web-vitals": "^2.1.4"
   },
@@ -55,9 +60,8 @@
     "@babel/node": "^7.22.5",
     "@babel/preset-env": "^7.22.5",
     "@babel/preset-react": "^7.22.5",
-    "http-status": "^1.6.2",
+    "dotenv": "^16.3.1",
     "nodemon": "^2.0.22",
-    "npm-watch": "^0.11.0",
-    "tesseract.js": "^4.1.0"
+    "npm-watch": "^0.11.0"
   }
 }

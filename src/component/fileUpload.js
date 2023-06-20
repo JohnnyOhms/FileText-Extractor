@@ -14,7 +14,7 @@ export const FileUpload = () => {
     const formData = new FormData();
     formData.append("imgUpload", image);
     axios
-      .post("http://localhost:9000/api/extract", formData)
+      .post("http://localhost:9000/api/upload", formData)
       .then((res) => {
         console.log(res);
       })
