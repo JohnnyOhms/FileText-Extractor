@@ -5,13 +5,14 @@ const bcrypt = require("bcrypt");
 const fs = require("fs");
 const uuid = require("uuid");
 const { UnautorizedError, BadRequestError } = require("../errors");
-const { JwtToken, bcryptPassword } = require("../config/util");
+const { JwtToken } = require("../config/util");
 
 const Register = (req, res, next) => {
   const { username, email, password } = req.body;
   if (!username || !email || !password) {
     return next(new BadRequestError("Provide the required info"));
   }
+  const userId = uuid();
 
   db.query(
     "SELECT email FROM users WHERE email = ?",
@@ -29,19 +30,18 @@ const Register = (req, res, next) => {
       const salt = bcrypt.genSaltSync(10);
       const hash = bcrypt.hashSync(password.toString(), salt);
       req.body["password"] = hash;
-      const token = JwtToken.signToken(req.body);
+      const token = JwtToken.signToken({ userId, email, username });
       db.query(
-        `INSERT INTO users VALUES ?`,
-        { email, username, password: passWord, userId: uuid() },
+        "INSERT INTO users (`email`, `username`, `password`, `userId`) VALUES (?, ?, ?, ?)",
+        [email, username, req.body.password, userId],
         (err, result) => {
           if (err) {
-            next(new BadRequestError("Failed to create account"));
+            console.log(err);
+            return next(new BadRequestError("Failed to create an account"));
           }
-          console.log(result);
-          console.log("insert user");
-          res
+          return res
             .status(statusCode.CREATED)
-            .send({ success: true, mssg: "user created" });
+            .send({ success: true, mssg: "user created", username, token });
         }
       );
     }
