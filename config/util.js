@@ -16,9 +16,23 @@ const JwtToken = {
     );
   },
   verifyToken: (token) => {
-    const publicKey = fs.readFileSync("./id_rsa_public.pem", "utf-8");
-    jw.verify(token, publicKey, { algorithms: ["RS256"] });
+    const publicKey = fs.readFileSync(
+      path.join(__dirname, "/id_rsa_public.pem"),
+      "utf-8"
+    );
+    return jw.verify(token, publicKey, { algorithms: ["RS256"] });
   },
 };
 
-module.exports = { JwtToken };
+const user = (email, username, password, userId) => {
+  return [
+    {
+      email: email,
+      username,
+      password,
+      userId,
+    },
+  ];
+};
+
+module.exports = { JwtToken, user };
