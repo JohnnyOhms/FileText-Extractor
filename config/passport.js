@@ -1,8 +1,9 @@
 const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
-const GoogleStrategy = require("passport-google-oauth2").Strategy;
+const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
+const uuid = require("uuid");
 
 // local startegy
 const custumFileds = {
@@ -25,7 +26,7 @@ const verifyCallback = (email, password, done) => {
     if (!verifyPassword) {
       return done(null, false);
     }
-    return done(null, user);
+    return done(null, user[0]);
   });
 };
 
@@ -40,11 +41,41 @@ passport.use(
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: "http://localhost:9000/api/auth/google/callback",
-      passReqToCallback: true,
     },
     function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
-      return done(err, user);
+      process.nextTick(function () {
+        const { email, given_name, sub } = profile._json;
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(sub.toString(), salt);
+        const userId = uuid();
+        db.query(
+          `SELECT * FROM users WHERE email = ?`,
+          [email],
+          (err, result) => {
+            if (err) {
+              return done(err);
+            }
+            if (result.length > 0) {
+              return done(err, result[0]);
+            }
+            db.query(
+              "INSERT INTO users (`email`, `username`, `password`, `userId`) VALUES (?, ?, ?, ?)",
+              [email, given_name, hash, userId],
+              (err, result) => {
+                if (err) {
+                  return done(err);
+                }
+                return done(err, {
+                  email,
+                  username: given_name,
+                  password: hash,
+                  userId,
+                });
+              }
+            );
+          }
+        );
+      });
     }
   )
 );
@@ -55,11 +86,14 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser((user, done) => {
   // qurey to find user from db
-  const userId = user[0].userId;
-  db.query(`SELECT * FROM users WHERE userId = ?`, [userId], (err, result) => {
-    if (err) {
-      return done(err);
+  db.query(
+    `SELECT * FROM users WHERE userId = ?`,
+    [user.userId],
+    (err, result) => {
+      if (err) {
+        return done(err);
+      }
+      return done(null, result[0]);
     }
-    return done(null, result);
-  });
+  );
 });
