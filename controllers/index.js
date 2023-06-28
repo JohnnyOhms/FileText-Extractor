@@ -2,6 +2,10 @@ const statusCode = require("http-status");
 const Tesseract = require("tesseract.js");
 const fs = require("node:fs");
 
+const dashboard = (req, res, next) => {
+  res.status(statusCode.OK).send("dashboard page");
+};
+
 const extractText = (req, res) => {
   const img = fs.readFileSync("./image2.png");
   Tesseract.recognize(img, "eng", { logger: (m) => console.log(m) })
@@ -15,4 +19,5 @@ const extractText = (req, res) => {
 
 module.exports = {
   extractText,
+  dashboard,
 };
