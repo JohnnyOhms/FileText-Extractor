@@ -5,6 +5,7 @@ const GitHubStrategy = require("passport-github2").Strategy;
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
+const { JwtToken } = require("./util");
 
 // local startegy
 const custumFileds = {
@@ -20,6 +21,11 @@ const verifyCallback = (email, password, done) => {
     if (!user) {
       return done(null, false);
     }
+    JwtToken.signToken({
+      userId: user[0].userId,
+      username: user[0].username,
+      email: user[0].email,
+    });
     const verifyPassword = bcrypt.compareSync(
       password.toString(),
       user[0].password
