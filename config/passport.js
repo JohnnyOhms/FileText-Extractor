@@ -2,10 +2,13 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const GitHubStrategy = require("passport-github2").Strategy;
+const JWTStrategy = require("passport-jwt").Strategy;
+const ExtractJWT = require("passport-jwt").ExtractJwt;
 const db = require("../config/db");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
-const { JwtToken } = require("./util");
+const fs = require("node:fs");
+const path = require("node:path");
 
 // local startegy
 const custumFileds = {
@@ -21,11 +24,6 @@ const verifyCallback = (email, password, done) => {
     if (!user) {
       return done(null, false);
     }
-    JwtToken.signToken({
-      userId: user[0].userId,
-      username: user[0].username,
-      email: user[0].email,
-    });
     const verifyPassword = bcrypt.compareSync(
       password.toString(),
       user[0].password
@@ -135,6 +133,35 @@ passport.use(
           }
         );
       });
+    }
+  )
+);
+
+// sign token strategy
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: fs.readFileSync(
+        path.join(__dirname, "/id_rsa_private.pem"),
+        "utf-8"
+      ),
+    },
+    function (jwtPayload, cb) {
+      //find the user in db if needed
+      return db.query(
+        "SELECT * FROM users WHERE userId = ?",
+        [jwtPayload.userId],
+        (err, user) => {
+          if (err) {
+            return done(err);
+          }
+          if (!user) {
+            return done(null, false);
+          }
+          return done(null, user[0]);
+        }
+      );
     }
   )
 );
