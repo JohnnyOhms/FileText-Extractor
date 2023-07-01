@@ -16,26 +16,30 @@ const custumFileds = {
   passwordField: "password",
 };
 
-const verifyCallback = (email, password, done) => {
-  db.query("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
-    if (err) {
-      return done(err);
-    }
-    if (!user) {
-      return done(null, false);
-    }
-    const verifyPassword = bcrypt.compareSync(
-      password.toString(),
-      user[0].password
-    );
-    if (!verifyPassword) {
-      return done(null, false);
-    }
-    return done(null, user[0]);
-  });
-};
-
-const strategy = new LocalStrategy(custumFileds, verifyCallback);
+const strategy = new LocalStrategy(
+  {
+    usernameField: "email",
+    passwordField: "password",
+  },
+  (verifyCallback = (email, password, done) => {
+    db.query("SELECT * FROM users WHERE email = ?", [email], (err, user) => {
+      if (err) {
+        return done(err);
+      }
+      if (user.length <= 0) {
+        return done(null, false);
+      }
+      const verifyPassword = bcrypt.compareSync(
+        password.toString(),
+        user[0].password
+      );
+      if (!verifyPassword) {
+        return done(null, false);
+      }
+      return done(null, user[0]);
+    });
+  })
+);
 
 passport.use(strategy);
 
@@ -94,6 +98,7 @@ passport.use(
       callbackURL: "http://localhost:9000/api/auth/github/callback",
     },
     function (accessToken, refreshToken, profile, done) {
+      console.log(profile);
       process.nextTick(function () {
         const { id, login } = profile._json;
         const email =
@@ -104,7 +109,7 @@ passport.use(
         const salt = bcrypt.genSaltSync(10);
         const hash = bcrypt.hashSync(id.toString(), salt);
         const userId = uuid();
-
+        // console.lo
         db.query(
           `SELECT * FROM users WHERE email = ?`,
           [email],
