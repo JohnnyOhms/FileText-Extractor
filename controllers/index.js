@@ -38,19 +38,40 @@ const uploadFile = (req, res, next) => {
   }
   let id = req.session.user.userId.toString(),
     file = req.file.filename.toString();
-  db.query(
-    `INSERT INTO uploads (\`userId\`, \`file\`) VALUES (?, ?)`,
-    [id, file],
-    (err, result) => {
-      if (err) {
-        return next(new BadRequestError("failed to upload"));
-      }
-      return res.status(statusCode.CREATED).json({
-        sucess: true,
-        file: { name: req.file.originalname, size: req.file.size },
-      });
+
+  db.query("SELECT * FROM uploads WHERE userID = ?", [id], (err, result) => {
+    if (err) {
+      return next(new BadRequestError("failed to load data"));
     }
-  );
+    if (result.length <= 0) {
+      db.query(
+        `INSERT INTO uploads (\`userId\`, \`file\`) VALUES (?, ?)`,
+        [id, file],
+        (err, result) => {
+          if (err) {
+            return next(new BadRequestError("failed to upload"));
+          }
+          return res.status(statusCode.CREATED).json({
+            sucess: true,
+            file: { name: req.file.originalname, size: req.file.size },
+          });
+        }
+      );
+    }
+    db.query(
+      "UPDATE uploads SET file = ? WHERE userId = ?",
+      [file, id],
+      (err, result) => {
+        if (err) {
+          return next(new BadRequestError("failed to upload"));
+        }
+        return res.status(statusCode.CREATED).json({
+          sucess: true,
+          file: { name: req.file.originalname, size: req.file.size },
+        });
+      }
+    );
+  });
 };
 
 module.exports = {
