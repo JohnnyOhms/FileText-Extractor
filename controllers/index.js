@@ -39,7 +39,7 @@ const uploadFile = (req, res, next) => {
       return next(new BadRequestError("failed to load data"));
     }
     if (result.length <= 0) {
-      db.query(
+      return db.query(
         `INSERT INTO uploads (\`userId\`, \`file\`) VALUES (?, ?)`,
         [id, file],
         (err, result) => {
@@ -162,4 +162,8 @@ const deleteAllText = (req, res, next) => {
 module.exports = {
   extractText,
   uploadFile,
+  getAllText,
+  saveText,
+  deleteText,
+  deleteAllText,
 };
