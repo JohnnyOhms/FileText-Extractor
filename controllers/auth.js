@@ -36,9 +36,10 @@ const Register = (req, res, next) => {
           if (err) {
             return next(new BadRequestError("Failed to create an account"));
           }
+          req.session.user = { ...req.body, userId };
           return res
             .status(statusCode.CREATED)
-            .send({ success: true, mssg: "user created", username, token });
+            .json({ success: true, mssg: "user created", username, token });
         }
       );
     }
@@ -55,18 +56,32 @@ const login = (req, res, next) => {
     }
     req.login(user, { session: true }, (err) => {
       if (err) {
-        res.send(err);
+        return next(new BadRequestError("something went wrong"));
       }
+      req.session.user = user;
       const token = JwtToken.signToken({
         userId: user.userId,
         email: user.email,
         username: user.username,
       });
-      return res.json({ user, token });
+      return res.status(statusCode.CREATED).json({ user, token });
     });
   })(req, res);
 };
 
+const signTokenOauth = (req, res, next) => {
+  const user = req.session.passport.user;
+  if (!user) {
+    return next(new BadRequestError("Something went wrong, try again"));
+  }
+  const token = JwtToken.signToken({
+    userId: user.userId,
+    email: user.email,
+    username: user.username,
+  });
+  return res.status(statusCode.CREATED).json({ success: true, user, token });
+};
+
 const forgotPassword = (req, res, next) => {};
 
-module.exports = { Register, forgotPassword, login };
+module.exports = { Register, forgotPassword, login, signTokenOauth };
