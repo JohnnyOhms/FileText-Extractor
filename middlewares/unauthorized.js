@@ -3,7 +3,7 @@ const { UnautorizedError } = require("../errors");
 const asyncWrapper = require("./asyncWrapper");
 const { JwtToken } = require("../config/util");
 
-const auth = asyncWrapper((req, res, next) => {
+const authorization = asyncWrapper((req, res, next) => {
   const authHeader = req.header.authorization;
   if (!authHeader || !authHeader.startWith("Bearer")) {
     return next(new UnautorizedError("Unauthorized"));
@@ -23,4 +23,4 @@ const auth = asyncWrapper((req, res, next) => {
   }
 });
 
-module.exports = auth;
+module.exports = authorization;

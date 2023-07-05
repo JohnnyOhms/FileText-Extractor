@@ -104,7 +104,7 @@ const saveText = (req, res, next) => {
   const userId = user.userId;
   const textId = uuid();
   db.query(
-    `INSERT INTO savedText (\`userId\`, \`text\`, \'DOC\', \'textId\') VALUES (?, ?, ?)`,
+    `INSERT INTO savedText (\`userId\`, \`text\`, \'DOC\', \'textId\') VALUES (?, ?, ?, ?)`,
     [userId, text, date, textId],
     (err, result) => {
       if (err) {

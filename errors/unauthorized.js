@@ -2,8 +2,8 @@ const CustumeError = require("./custome");
 const statusCode = require("http-status");
 
 class UnautorizedError extends CustumeError {
-  constructor(mssg) {
-    super(mssg);
+  constructor(message) {
+    super(message);
     this.statusCode = statusCode.UNAUTHORIZED;
   }
 }

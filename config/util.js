@@ -24,15 +24,4 @@ const JwtToken = {
   },
 };
 
-const user = (email, username, password, userId) => {
-  return [
-    {
-      email: email,
-      username,
-      password,
-      userId,
-    },
-  ];
-};
-
-module.exports = { JwtToken, user };
+module.exports = { JwtToken };

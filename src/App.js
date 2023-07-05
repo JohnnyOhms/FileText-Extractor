@@ -4,6 +4,7 @@ import { Home } from "./pages/home";
 import { Profile } from "./pages/profile";
 import { FileUpload } from "./component/fileUpload";
 import styled from "styled-components";
+import { Login } from "./pages/login";
 
 const Container = styled.div`
   background-color: grey;
@@ -22,6 +23,7 @@ function App() {
           <Link to="/profile">profile</Link> <br />
         </li>
         <FileUpload />
+        <Login />
       </ul>
       <Routes>
         <Route path="/home" element={<Home />} />

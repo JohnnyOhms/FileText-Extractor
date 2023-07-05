@@ -1,6 +1,6 @@
 class CustumeError extends Error {
-  constructor(mssg) {
-    super(mssg);
+  constructor(message) {
+    super(message);
   }
 }
 
