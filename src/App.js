@@ -1,10 +1,10 @@
 import React from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import { Home } from "./pages/home";
-import { Profile } from "./pages/profile";
 import { FileUpload } from "./component/fileUpload";
 import styled from "styled-components";
-import { Login } from "./pages/login";
+import { ThemeProvider, createTheme } from "@mui/material";
+import { NotFoundPage } from "./pages/notFoundPage";
 
 const Container = styled.div`
   background-color: grey;
@@ -12,24 +12,26 @@ const Container = styled.div`
 `;
 
 function App() {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#151414",
+      },
+      secondary: {
+        main: "#d88507",
+      },
+    },
+  });
+
   return (
-    <Container>
-      <h4>Render App</h4>
-      <ul>
-        <li>
-          <Link to="/home">Home</Link> <br />
-        </li>
-        <li>
-          <Link to="/profile">profile</Link> <br />
-        </li>
-        <FileUpload />
-        <Login />
-      </ul>
-      <Routes>
-        <Route path="/home" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-      </Routes>
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Container>
+    </ThemeProvider>
   );
 }
 
