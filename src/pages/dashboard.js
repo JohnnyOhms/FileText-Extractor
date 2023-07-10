@@ -1,96 +1,28 @@
 import React from "react";
 import { NavBar } from "../component/Navbar";
-import {
-  DashboardWraper,
-  SectionOne,
-  SectionTwo,
-} from "../styles/styledDashboard";
-import CameraAltIcon from "@mui/icons-material/CameraAlt";
-import CollectionsIcon from "@mui/icons-material/Collections";
-import { Paper, Avatar } from "@mui/material";
+import { DashboardWraper } from "../styles/styledDashboard";
 import { styled } from "@mui/system";
+import { SectionOne } from "../component/Dash-SectionOne";
+import { Paper, Stack } from "@mui/material";
+import { SectionTwo } from "../component/Dash-SectionTwo";
 
-const Item = styled(Paper)(({ theme }) => ({
+export const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   textAlign: "center",
   color: theme.palette.text.secondary,
   height: "100%",
-  margin: "10px 0",
+  width: "100%",
   lineHeight: "60px",
 }));
 
 export const Dashboard = () => {
   return (
-    <div>
+    <Stack sx={{ height: "100%", width: "100%" }}>
       <NavBar />
       <DashboardWraper>
-        <Item>
-          <SectionOne>
-            <div
-              style={{
-                height: "40%",
-                width: "70%",
-                margin: "2% auto 0 auto",
-                display: "flex",
-                cursor: "pointer",
-              }}
-            >
-              <span
-                style={{
-                  background: "grey",
-                  margin: " auto auto 0 auto",
-                  borderRadius: "50%",
-                  padding: "30px",
-                  display: "flex",
-                }}
-              >
-                <CameraAltIcon
-                  sx={{ color: "white", margin: "auto", fontSize: "70px" }}
-                ></CameraAltIcon>
-              </span>
-              <span
-                style={{
-                  background: "grey",
-                  margin: "auto auto 0 auto",
-                  borderRadius: "50%",
-                  padding: "30px",
-                  display: "flex",
-                }}
-              >
-                <CollectionsIcon
-                  sx={{ color: "white", fontSize: "70px" }}
-                ></CollectionsIcon>
-              </span>
-            </div>
-            <div
-              style={{
-                width: "70%",
-                margin: "0 auto",
-                display: "flex",
-                justifyContent: "space-between",
-              }}
-            >
-              <p
-                style={{ marginLeft: "15%", fontSize: "25px", padding: "10px" }}
-              >
-                Camera
-              </p>
-              <p
-                style={{
-                  marginRight: "15%",
-                  fontSize: "25px",
-                  padding: "10px",
-                }}
-              >
-                Gallery
-              </p>
-            </div>
-          </SectionOne>
-        </Item>
-        <SectionTwo>
-          <Item>vfklkfl</Item>
-        </SectionTwo>
+        <SectionOne />
+        <SectionTwo />
       </DashboardWraper>
-    </div>
+    </Stack>
   );
 };

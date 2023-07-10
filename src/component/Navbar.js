@@ -123,7 +123,7 @@ export const NavBar = () => {
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
 
-          <Box sx={{ display: { xs: "none", md: "flex" } }}>
+          <Box sx={{ display: { xs: "none", md: "flex" }, cursor: "pointer" }}>
             <Typography variant="h6" sx={{ margin: "0 7px", fontSize: "17px" }}>
               <IconButton size="small" color="inherit">
                 <TwitterIcon fontSize="16px" />

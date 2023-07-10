@@ -1,58 +1,23 @@
 import React from "react";
-import styled from "styled-components";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Typography } from "@mui/material";
+import {
+  IntroContainer,
+  IntroHeader,
+  IntroSection,
+  IntroStartBtn,
+  IntroWrapper,
+  StartWrapper,
+} from "../styles/styledHomepage";
 
-const IntroContainer = styled.div`
-  height: 100vh;
-  color: black;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-`;
-
-const IntroHeader = styled.h1`
-  font-size: 3.2rem;
-  font-family: "Lucida Sans", Arial, sans-serif, serif;
-  margin: 2rem auto;
-`;
-
-const IntroSection = styled.div`
-  margin: auto 0 auto 20rem;
-  padding: 1rem;
-  height: 80vh;
-  width: 35vw;
-  word-wrap: break-word;
-`;
-
-const StartWrapper = styled.div`
-  display: flex;
-  width; 60%
-`;
-
-const IntroStartBtn = styled.h1`
-  background-color: #106dd8;
-  color: white;
-  padding: 0.5rem;
-  margin: 23px 8px;
-  border-radius: 1.3rem;
-  width: 12rem;
-`;
-
-const IntroWrapper = styled.div`
-  display: flex;
-  height: 100vh;
-  width: 100vw;
-`;
-
-export const StartPage = () => {
+export const HomePage = () => {
   return (
     <IntroContainer className="home-container">
-      <IntroWrapper>
+      <IntroWrapper className="wrapper">
         <IntroSection>
           <IntroHeader>
             Fastest way to <br />
-            extract content out of image{" "}
+            extract text out of image{" "}
           </IntroHeader>
           <Typography variant="body1">
             {" "}
@@ -75,9 +40,10 @@ export const StartPage = () => {
             <Typography
               variant="body2"
               sx={{
-                fontSize: "18px",
+                fontSize: "19px",
                 margin: "auto 0 auto 7px",
                 color: "#106dd8",
+                fontWeight: "800",
               }}
             >
               view source code{" "}

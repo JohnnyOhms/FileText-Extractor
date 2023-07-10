@@ -1,36 +1,30 @@
 import React from "react";
-import { Routes, Route, Link } from "react-router-dom";
-import { Home } from "./pages/home";
-import { FileUpload } from "./component/fileUpload";
-import styled from "styled-components";
+import { Routes, Route } from "react-router-dom";
+import { Main } from "./main";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { NotFoundPage } from "./pages/notFoundPage";
-
-const Container = styled.div`
-  background-color: grey;
-  color: white;
-`;
+import { Dashboard } from "./pages/dashboard";
 
 function App() {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#151414",
+        main: "#ffff",
       },
       secondary: {
         main: "#d88507",
       },
+      mode: "light",
     },
   });
 
   return (
     <ThemeProvider theme={theme}>
-      <Container>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="*" element={<NotFoundPage />} />
-        </Routes>
-      </Container>
+      <Routes>
+        <Route path="/" element={<Main />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </ThemeProvider>
   );
 }
