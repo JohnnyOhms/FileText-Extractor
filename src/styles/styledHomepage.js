@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const IntroContainer = styled.div`
   height: 100vh;
@@ -25,6 +25,7 @@ export const IntroSection = styled.div`
     margin: 2px;
     width: 100vw;
   }
+
   @media (max-width: 900px) {
     margin: 2px;
     width: 100vw;
@@ -34,7 +35,6 @@ export const IntroSection = styled.div`
 export const IntroHeader = styled.h1`
   font-size: 3.2rem;
   font-family: "Lucida Sans", Arial, sans-serif, serif;
-  margin: 2rem auto;
 
   @media (max-width: 600px) {
     font-size: 2.5rem;
@@ -59,4 +59,34 @@ export const IntroStartBtn = styled.h1`
   margin: 23px 8px;
   border-radius: 1.3rem;
   width: 12rem;
+`;
+
+const Blink = keyframes`
+   0%{
+        background-color: #106dd8;
+    }
+    40%{
+        background-color: #106dd8;
+    }
+    70%{
+        opacity: 0;
+    }
+    90%{
+        opacity: 0;
+    }
+    100%{
+        background-color: #106dd8;
+    }
+`;
+
+export const Cursor = styled.span`
+  display: inline-block;
+  width: 7px;
+  height: 40px;
+  background-color: #106dd8;
+  animation: ${Blink} 1s infinite;
+
+  @media (max-width: 600px) {
+    height: 30px;
+  }
 `;
