@@ -1,70 +1,80 @@
-# Getting Started with Create React App
+# FileText Extractor
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+FileText Extractor is a Node.js web application that allows users to extract text from images, PDFs, and DOCX files. It provides registered users with the ability to store the extracted text in their user profiles. The application is built using Node.js, Express.js, MySQL for the backend, and SSR (Server-Side Rendering) for efficient rendering. Passport strategies are used for authentication, and the front end is built with React, MUI, and Styled Components.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Extract text from images, PDFs, and DOCX files
+- Store extracted text in user profiles
+- User authentication with Passport strategies
+- Server-Side Rendering for efficient rendering
+- Responsive frontend design with React, MUI, and Styled Components
 
-### `npm start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Follow these steps to install and run the FileText Extractor application:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1. Clone the repository:
 
-### `npm test`
+   ```bash
+   git clone https://github.com/JohnnyOhms/FileText-Extractor
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Install the dependency:
 
-### `npm run build`
+    ```bash
+    npm install
+    
+3. Set up the database:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+  - Create a MySQL database
+  - Update the database configuration in the .env file located in the project root directory:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+     ```bash
+    DB_HOST=<your-database-host>
+    DB_PORT=<your-database-port>
+    DB_USER=<your-database-username>
+    DB_PASSWORD=<your-database-password>
+    DB_NAME=<your-database-name>
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+4. Start the application:
+     
+     ```bash
+     npm start
 
-### `npm run eject`
+## Usage
+1. Create a new account or log in to your existing account.
+2. Once logged in, navigate to the file upload page.
+3. Select an image, PDF, or DOCX file to upload.
+4. Click the "Extract Text" button.
+5. The application will process the file and extract the text.
+6. You can view and manage your extracted text in your user profile.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Technologies Used
+The following technologies and libraries were used to build FileText Extractor:
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Node.js - JavaScript runtime environment
+- Express.js - Web application framework for Node.js
+- MySQL - Relational database management system
+- SSR (Server-Side Rendering) - Efficient rendering technique
+- Passport.js - Authentication middleware for Node.js
+- React - JavaScript library for building user interfaces
+- Material-UI (MUI) - React UI framework
+- Styled Components - CSS-in-JS library for styling React components
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Contributing
+Contributions are welcome! If you would like to contribute to FileText Extractor, please follow these steps:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+1. Fork the repository.
+2. Create a new branch for your feature/fix: git checkout -b my-feature.
+3. Commit your changes: git commit -am 'Add new feature'.
+4. Push the branch to your fork: git push origin my-feature.
+5. Submit a pull request.
 
-## Learn More
+## License
+This project is licensed under the MIT License.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Contact
+For any questions or inquiries, please email officialjohn662@example.com.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
