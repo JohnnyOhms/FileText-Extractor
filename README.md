@@ -17,7 +17,7 @@ Follow these steps to install and run the FileText Extractor application:
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/JohnnyOhms/FileText-Extractor
+   git clone https://github.com/JohnnyOhms/FileText-Extractor.git
 
 2. Install the dependency:
 
