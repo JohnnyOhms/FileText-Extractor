@@ -10,6 +10,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import LoginIcon from "@mui/icons-material/Login";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import MenuIcon from "@mui/icons-material/Menu";
+import { blue } from "@mui/material/colors";
 
 export const NavBar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -126,7 +127,7 @@ export const NavBar = () => {
           <Box sx={{ display: { xs: "none", md: "flex" }, cursor: "pointer" }}>
             <Typography variant="h6" sx={{ margin: "0 7px", fontSize: "17px" }}>
               <IconButton size="small" color="inherit">
-                <TwitterIcon fontSize="16px" />
+                <TwitterIcon fontSize="16px" sx={{ color: blue[500] }} />
               </IconButton>
               About
             </Typography>

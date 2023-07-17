@@ -2,8 +2,10 @@ import React from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Typography } from "@mui/material";
 import {
+  Cursor,
   IntroContainer,
   IntroHeader,
+  IntroHeaderDetals,
   IntroSection,
   IntroStartBtn,
   IntroWrapper,
@@ -17,7 +19,9 @@ export const HomePage = () => {
         <IntroSection>
           <IntroHeader>
             Fastest way to <br />
-            extract text out of image{" "}
+            <Cursor />
+            <IntroHeaderDetals> extract text out of image</IntroHeaderDetals>
+            {/* extract text out of image */}
           </IntroHeader>
           <Typography variant="body1">
             {" "}

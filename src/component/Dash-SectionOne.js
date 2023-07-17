@@ -1,5 +1,10 @@
 import React from "react";
-import { SectionOneDiv } from "../styles/styledDashboard";
+import {
+  BaseContainer,
+  CameraLabel,
+  FileLabel,
+  SectionOneDiv,
+} from "../styles/styledDashboard";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CollectionsIcon from "@mui/icons-material/Collections";
 import DescriptionIcon from "@mui/icons-material/Description";
@@ -11,7 +16,7 @@ import styled from "@emotion/styled";
 const FileItem = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
-  height: "30%",
+  height: { sm: "30%", md: "30%", xs: "10%" },
   width: "70%",
   margin: " auto",
   display: "flex",
@@ -43,7 +48,11 @@ export const SectionOne = () => {
               }}
             >
               <CameraAltIcon
-                sx={{ color: "white", margin: "auto", fontSize: "70px" }}
+                sx={{
+                  color: "white",
+                  margin: "auto",
+                  fontSize: { md: "70px", sm: "60px", xs: "50px" },
+                }}
               ></CameraAltIcon>
             </span>
             <span
@@ -56,30 +65,22 @@ export const SectionOne = () => {
               }}
             >
               <CollectionsIcon
-                sx={{ color: "white", fontSize: "70px" }}
+                sx={{
+                  color: "white",
+                  fontSize: { md: "70px", sm: "60px", xs: "50px" },
+                }}
               ></CollectionsIcon>
             </span>
           </div>
           <div
             style={{
-              width: "70%",
-              margin: "0 auto",
+              width: "100%",
               display: "flex",
               justifyContent: "space-between",
             }}
           >
-            <p style={{ marginLeft: "1%", fontSize: "25px", padding: "10px" }}>
-              Camera
-            </p>
-            <p
-              style={{
-                marginRight: "1%",
-                fontSize: "25px",
-                padding: "10px",
-              }}
-            >
-              Gallery
-            </p>
+            <CameraLabel>Camera</CameraLabel>
+            <FileLabel>Gallery</FileLabel>
           </div>
         </FileItem>
         <div
@@ -100,24 +101,17 @@ export const SectionOne = () => {
             <DescriptionIcon
               sx={{
                 height: "70%",
-                fontSize: "300px",
+                fontSize: { md: "300px", sm: "300px", xs: "200px" },
                 color: "grey",
               }}
             />
             <Typography variant="body2">image.jpg</Typography>
-            <div
-              style={{
-                width: "100%",
-                display: "flex",
-                justifyContent: "space-between",
-                padding: "0 10px",
-              }}
-            >
+            <BaseContainer>
               <h3>No preview available</h3>
               <Button variant="contained" endIcon={<SendIcon />}>
                 Extract
               </Button>
-            </div>
+            </BaseContainer>
           </div>
         </div>
       </Item>

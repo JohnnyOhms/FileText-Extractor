@@ -5,6 +5,7 @@ import { styled } from "@mui/system";
 import { SectionOne } from "../component/Dash-SectionOne";
 import { Paper, Stack } from "@mui/material";
 import { SectionTwo } from "../component/Dash-SectionTwo";
+import { ResultText } from "../component/resultText";
 
 export const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -23,6 +24,17 @@ export const Dashboard = () => {
         <SectionOne />
         <SectionTwo />
       </DashboardWraper>
+      <div
+        style={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          backgroundColor: "rgba(0, 0, 0, 0.8)",
+          zIndex: "4",
+        }}
+      >
+        <ResultText />
+      </div>
     </Stack>
   );
 };

@@ -25,6 +25,7 @@ export const ResultText = () => {
           height: { xs: "100vh", sm: "80vh", md: "80vh" },
           m: "auto",
           mt: { xs: 0, sm: "30px", md: "30px" },
+          opacity: "1",
         },
       }}
     >

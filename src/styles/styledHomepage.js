@@ -41,6 +41,15 @@ export const IntroHeader = styled.h1`
   }
 `;
 
+export const IntroHeaderDetals = styled.span`
+  font-size: 3.2rem;
+  font-family: "Lucida Sans", Arial, sans-serif, serif;
+
+  @media (max-width: 600px) {
+    font-size: 2.5rem;
+  }
+`;
+
 export const StartWrapper = styled.div`
   display: flex;
   width; 60%
