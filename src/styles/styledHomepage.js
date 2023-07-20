@@ -41,15 +41,6 @@ export const IntroHeader = styled.h1`
   }
 `;
 
-export const IntroHeaderDetals = styled.span`
-  font-size: 3.2rem;
-  font-family: "Lucida Sans", Arial, sans-serif, serif;
-
-  @media (max-width: 600px) {
-    font-size: 2.5rem;
-  }
-`;
-
 export const StartWrapper = styled.div`
   display: flex;
   width; 60%
@@ -68,34 +59,4 @@ export const IntroStartBtn = styled.h1`
   margin: 23px 8px;
   border-radius: 1.3rem;
   width: 12rem;
-`;
-
-const Blink = keyframes`
-   0%{
-        background-color: #106dd8;
-    }
-    40%{
-        background-color: #106dd8;
-    }
-    70%{
-        opacity: 0;
-    }
-    90%{
-        opacity: 0;
-    }
-    100%{
-        background-color: #106dd8;
-    }
-`;
-
-export const Cursor = styled.span`
-  display: inline-block;
-  width: 7px;
-  height: 40px;
-  background-color: #106dd8;
-  animation: ${Blink} 1s infinite;
-
-  @media (max-width: 600px) {
-    height: 30px;
-  }
 `;

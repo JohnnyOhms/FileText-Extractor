@@ -20,3 +20,38 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+@keyframes Blink {
+  0% {
+    background-color: #106dd8;
+  }
+  40% {
+    background-color: #106dd8;
+  }
+  70% {
+    opacity: 0;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    background-color: #106dd8;
+  }
+}
+
+.cursor {
+  display: inline-block;
+  width: 10px;
+  height: 40px;
+  background-color: #106dd8;
+  animation: Blink 1s infinite;
+}
+@media (max-width: 600px) {
+  .cursor {
+    height: 30px;
+  }
+}
+
+.stop-blink {
+  animation: none;
+}

@@ -1,16 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import { Typography } from "@mui/material";
 import {
-  Cursor,
   IntroContainer,
   IntroHeader,
-  IntroHeaderDetals,
   IntroSection,
   IntroStartBtn,
   IntroWrapper,
   StartWrapper,
 } from "../styles/styledHomepage";
+import { TypewriterEffect } from "../component/TypeWriterEffect";
 
 export const HomePage = () => {
   return (
@@ -18,10 +17,8 @@ export const HomePage = () => {
       <IntroWrapper className="wrapper">
         <IntroSection>
           <IntroHeader>
-            Fastest way to <br />
-            <Cursor />
-            <IntroHeaderDetals> extract text out of image</IntroHeaderDetals>
-            {/* extract text out of image */}
+            Fastest way to
+            <TypewriterEffect />
           </IntroHeader>
           <Typography variant="body1">
             {" "}
