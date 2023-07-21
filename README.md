@@ -49,6 +49,9 @@ Follow these steps to install and run the FileText Extractor application:
 
 - Pulic keys
 - Private Keys
+  
+    ```bash
+    node config/genkeys
 
 6. Start the application:
      
