@@ -36,7 +36,21 @@ Follow these steps to install and run the FileText Extractor application:
     DB_PASSWORD=<your-database-password>
     DB_NAME=<your-database-name>
 
-4. Start the application:
+4. Set up the passport js:
+
+  - Create a google auth profile
+  - Update the google auth configuration in the .env file located in the project root directory:
+
+     ```bash
+     GOOGLE_CLIENT_ID = <your-client-id>
+     GOOGLE_CLIENT_SECRET = <your-client-secret>
+
+5. run the genKeyPair function in the config/genKeys dictory to generate
+
+- Pulic keys
+- Private Keys
+
+6. Start the application:
      
      ```bash
      npm start
