@@ -45,7 +45,7 @@ Follow these steps to install and run the FileText Extractor application:
      GOOGLE_CLIENT_ID = <your-client-id>
      GOOGLE_CLIENT_SECRET = <your-client-secret>
 
-5. run the genKeyPair function in the config/genKeys dictory to generate
+5. run the genKeyPair function in the config/genKeys directory to generate
 
 - Pulic keys
 - Private Keys
