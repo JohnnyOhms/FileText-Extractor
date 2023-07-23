@@ -1,9 +1,14 @@
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Routes, Route } from "react-router-dom";
 import { Main } from "./main";
 import { ThemeProvider, createTheme } from "@mui/material";
 import { NotFoundPage } from "./pages/notFoundPage";
-import { Dashboard } from "./pages/dashboard";
+import Loading from "./component/Loading";
+const Dashboard = lazy(() =>
+  import("./pages/dashboard").then((module) => ({
+    default: module.Dashboard,
+  }))
+);
 
 function App() {
   const theme = createTheme({
@@ -22,7 +27,14 @@ function App() {
     <ThemeProvider theme={theme}>
       <Routes>
         <Route path="/" element={<Main />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <Suspense fallback={<Loading />}>
+              <Dashboard />
+            </Suspense>
+          }
+        />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </ThemeProvider>
