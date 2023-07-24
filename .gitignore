@@ -25,3 +25,4 @@ yarn-error.log*
 
 id_rsa_private.pem
 id_rsa_public.pem
+config/cookies-js
