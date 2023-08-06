@@ -6,18 +6,18 @@ import {
   FileLabel,
   PDFLabel,
   SectionOneDiv,
-} from "../styles/styledDashboard";
+} from "../../styles/styledDashboard";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import CollectionsIcon from "@mui/icons-material/Collections";
 import DescriptionIcon from "@mui/icons-material/Description";
 import SendIcon from "@mui/icons-material/Send";
 import { Button, Paper, Typography } from "@mui/material";
-import { Item } from "../pages/dashboard";
+import { Item } from "../../pages/dashboard";
 import styled from "@emotion/styled";
 import { blue } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
-import { openCamera } from "../slice/globalSlice";
-import { FileUpload } from "./FileUpload";
+import { openCamera } from "../../slice/globalSlice";
+import { FileUpload } from "../FileUpload/FileUpload";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 
@@ -46,6 +46,7 @@ export const SectionOne = ({ scrollRef }) => {
   const dispatch = useDispatch();
   const inputFileRef = useRef(null);
   const [fileName, setFileName] = useState("");
+  const [showComponent, setShowComponent] = useState(false);
 
   const handleCamera = () => {
     dispatch(openCamera());
@@ -64,12 +65,10 @@ export const SectionOne = ({ scrollRef }) => {
   const DocxFile = () => {
     setFileName(".docx");
     inputFileRef.current.click();
-    return <FileUpload fileRef={inputFileRef} fileType={fileName} />;
   };
 
   return (
     <SectionOneDiv ref={scrollRef}>
-      <FileUpload fileRef={inputFileRef} fileType={fileName} />
       <Item variant="outlined">
         <h2>Select image to Extract</h2>
         <FileItem variant="outlined">
@@ -110,6 +109,7 @@ export const SectionOne = ({ scrollRef }) => {
                 display: "flex",
               }}
             >
+              <FileUpload fileRef={inputFileRef} fileType={fileName} />;
               <CollectionsIcon
                 sx={{
                   color: "white",

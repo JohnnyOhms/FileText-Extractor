@@ -4,10 +4,13 @@ import ClearIcon from "@mui/icons-material/Clear";
 import React, { useRef, useCallback, useState } from "react";
 import Webcam from "react-webcam";
 import { blue, deepOrange } from "@mui/material/colors";
+import { openCamera } from "../../slice/globalSlice";
+import { useDispatch } from "react-redux";
 
 export const CameraCapture = () => {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const dispatch = useDispatch();
 
   const captureImage = useCallback(() => {
     const imageSrc = webcamRef.current.getScreenshot();
@@ -40,7 +43,7 @@ export const CameraCapture = () => {
             justifyContent: "space-between",
           }}
         >
-          <IconButton>
+          <IconButton onClick={() => dispatch(openCamera())}>
             <ClearIcon sx={{ color: deepOrange[500], fontSize: "30px" }} />
           </IconButton>
         </div>

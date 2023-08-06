@@ -4,6 +4,8 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import SaveAltIcon from "@mui/icons-material/SaveAlt";
 import ClearIcon from "@mui/icons-material/Clear";
 import styled from "@emotion/styled";
+import { useDispatch } from "react-redux";
+import { openResult } from "../../slice/globalSlice";
 
 const Result = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -17,6 +19,7 @@ const Result = styled(Paper)(({ theme }) => ({
 }));
 
 export const ResultText = () => {
+  const dispatch = useDispatch();
   return (
     <Box
       sx={{
@@ -39,7 +42,7 @@ export const ResultText = () => {
             justifyContent: "space-between",
           }}
         >
-          <IconButton>
+          <IconButton onClick={() => dispatch(openResult())}>
             <ClearIcon />
           </IconButton>
 

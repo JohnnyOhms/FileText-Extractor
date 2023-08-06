@@ -1,9 +1,9 @@
 import React from "react";
-import { SectionTwoDiv } from "../styles/styledDashboard";
-import { Item } from "../pages/dashboard";
+import { SectionTwoDiv } from "../../styles/styledDashboard";
+import { Item } from "../../pages/dashboard";
 import styled from "@emotion/styled";
 import { Avatar, Badge, Paper, Typography } from "@mui/material";
-import { deepOrange } from "@mui/material/colors";
+import { blue } from "@mui/material/colors";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -15,13 +15,15 @@ import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArticleIcon from "@mui/icons-material/Article";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useDispatch } from "react-redux";
+import { openResult } from "../../slice/globalSlice";
 
 const Profile = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
   height: "10%",
   width: "98%",
-  margin: "0 auto",
+  margin: "15px auto",
   padding: "10px ",
   lineHeight: "60px",
   display: "flex",
@@ -44,12 +46,13 @@ const Demo = styled("div")(({ theme }) => ({
   overflowY: "scroll",
 }));
 
-export const SectionTwo = () => {
+export const SectionTwo = ({ scrollRef }) => {
+  const dispatch = useDispatch();
   return (
-    <SectionTwoDiv>
+    <SectionTwoDiv ref={scrollRef}>
       <Item variant="outlined">
         <Profile variant="outlined">
-          <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+          <Avatar sx={{ bgcolor: blue[700] }}>N</Avatar>
           <div
             style={{
               width: "100%",
@@ -80,10 +83,13 @@ export const SectionTwo = () => {
                 </ListItemAvatar>
                 <ListItemText primary="Single-line item" />
                 <React.Fragment>
-                  <IconButton sx={{ mx: { xs: "1x", sm: 1, md: 1 } }}>
+                  <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
                     <DeleteIcon sx={{ fontSize: "30px" }} />
                   </IconButton>
-                  <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                  <IconButton
+                    onClick={() => dispatch(openResult())}
+                    sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}
+                  >
                     <ArticleIcon sx={{ fontSize: "30px" }} />
                   </IconButton>
                   <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>

@@ -2,9 +2,9 @@ import React, { useState, useEffect } from "react";
 
 export const TypewriterEffect = () => {
   const arrayWords = [
-    "Extract text from Image files",
-    "Extract text from PDF files",
-    "Extract text from DOCX files",
+    "text from Image files",
+    "text from PDF files",
+    "text from DOCX files",
   ];
   const [wordIndex, setWordIndex] = useState(0);
   const [charaIndex, setCharaIndex] = useState(0);

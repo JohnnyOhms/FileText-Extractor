@@ -189,7 +189,7 @@ function Load() {
   );
 }
 
-export default function Loading() {
+export function Loading() {
   return (
     <div>
       <Load loading />
