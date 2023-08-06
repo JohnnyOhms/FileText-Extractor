@@ -62,6 +62,7 @@ export const LoginForm = styled.div`
 `;
 
 export const Footer = styled.div`
+  color: black;
   width: 100%;
   height: 10vh;
   display: flex;
