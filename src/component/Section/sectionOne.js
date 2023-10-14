@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BaseContainer,
   CameraLabel,
@@ -26,6 +26,7 @@ import {
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import api from "../../utils/api";
+import Spinner from "../Loader/Spinner";
 
 const FileItem = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -50,6 +51,7 @@ const FileItem2 = styled(Paper)(({ theme }) => ({
 export const SectionOne = ({ scrollRef }) => {
   const filePreview = useSelector((state) => state.global.displayFile);
   const fileData = useSelector((state) => state.global.fileData);
+  const [showSpinner, setShowSpinner] = useState(false);
   const dispatch = useDispatch();
 
   const handleFileChange = (e) => {
@@ -84,13 +86,15 @@ export const SectionOne = ({ scrollRef }) => {
   };
 
   const extractText = () => {
+    setShowSpinner((prev) => !prev);
     api
       .post("extract")
       .then((res) => {
         dispatch(openResult());
         dispatch(addText(res.data.text));
+        setShowSpinner((prev) => !prev);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => alert(err));
   };
 
   return (
@@ -245,21 +249,29 @@ export const SectionOne = ({ scrollRef }) => {
                 </Typography>
 
                 <BaseContainer>
-                  <h3>No preview available</h3>
+                  {showSpinner ? (
+                    <>
+                      <Spinner />
+                    </>
+                  ) : (
+                    <>
+                      <h3>No preview available</h3>
 
-                  <Button
-                    variant="contained"
-                    endIcon={<SendIcon />}
-                    style={{
-                      background: blue[700],
-                      color: "white",
-                      // padding: "0 10px",
-                      borderRadius: "10px",
-                    }}
-                    onClick={extractText}
-                  >
-                    Extract
-                  </Button>
+                      <Button
+                        variant="contained"
+                        endIcon={<SendIcon />}
+                        style={{
+                          background: blue[700],
+                          color: "white",
+                          // padding: "0 10px",
+                          borderRadius: "10px",
+                        }}
+                        onClick={extractText}
+                      >
+                        Extract
+                      </Button>
+                    </>
+                  )}
                 </BaseContainer>
               </>
             )}
