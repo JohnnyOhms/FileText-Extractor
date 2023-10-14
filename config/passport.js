@@ -39,52 +39,52 @@ passport.use(
 );
 
 // google strategy
-// passport.use(
-//   new GoogleStrategy(
-//     {
-//       clientID: process.env.GOOGLE_CLIENT_ID,
-//       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-//       callbackURL: "http://localhost:9000/api/auth/google/callback",
-//     },
-//     function (accessToken, refreshToken, profile, done) {
-//       process.nextTick(function () {
-//         const { email, given_name, sub } = profile._json;
-//         const salt = bcrypt.genSaltSync(10);
-//         const hash = bcrypt.hashSync(sub.toString(), salt);
-//         const userId = uuid();
-//         db.query(
-//           `SELECT * FROM users WHERE email = ?`,
-//           [email],
-//           (err, result) => {
-//             if (err) {
-//               return done(err);
-//             }
-//             if (result.length > 0) {
-//               return done(err, result[0]);
-//             }
-//             db.query(
-//               "INSERT INTO users (`email`, `username`, `password`, `userId`) VALUES (?, ?, ?, ?)",
-//               [email, given_name, hash, userId],
-//               (err, result) => {
-//                 if (err) {
-//                   return done(err);
-//                 }
-//                 return done(err, {
-//                   email,
-//                   username: given_name,
-//                   password: hash,
-//                   userId,
-//                 });
-//               }
-//             );
-//           }
-//         );
-//       });
-//     }
-//   )
-// );
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: "http://localhost:9000/api/auth/google/callback",
+    },
+    function (accessToken, refreshToken, profile, done) {
+      process.nextTick(function () {
+        const { email, given_name, sub } = profile._json;
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(sub.toString(), salt);
+        const userId = uuid();
+        db.query(
+          `SELECT * FROM users WHERE email = ?`,
+          [email],
+          (err, result) => {
+            if (err) {
+              return done(err);
+            }
+            if (result.length > 0) {
+              return done(err, result[0]);
+            }
+            db.query(
+              "INSERT INTO users (`email`, `username`, `password`, `userId`) VALUES (?, ?, ?, ?)",
+              [email, given_name, hash, userId],
+              (err, result) => {
+                if (err) {
+                  return done(err);
+                }
+                return done(err, {
+                  email,
+                  username: given_name,
+                  password: hash,
+                  userId,
+                });
+              }
+            );
+          }
+        );
+      });
+    }
+  )
+);
 
-// github strategy
+// twitter strategy
 passport.use(
   new TwitterStrategy(
     {
@@ -93,46 +93,44 @@ passport.use(
       callbackURL: "http://localhost:9000/api/auth/twitter/callback",
     },
     function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
-      return done(null, profile);
-      // process.nextTick(function () {
-      //   const { id, login } = profile._json;
-      //   const email =
-      //     profile._json.company ||
-      //     profile._json.email ||
-      //     profile._json.blog ||
-      //     login;
-      //   const salt = bcrypt.genSaltSync(10);
-      //   const hash = bcrypt.hashSync(id.toString(), salt);
-      //   const userId = uuid();
-      //   db.query(
-      //     `SELECT * FROM users WHERE email = ?`,
-      //     [email],
-      //     (err, result) => {
-      //       if (err) {
-      //         return done(err);
-      //       }
-      //       if (result.length > 0) {
-      //         return done(err, result[0]);
-      //       }
-      //       db.query(
-      //         "INSERT INTO users (`email`, `username`, `password`, `userId`) VALUES (?, ?, ?, ?)",
-      //         [email, login, hash, userId],
-      //         (err, result) => {
-      //           if (err) {
-      //             return done(err);
-      //           }
-      //           return done(err, {
-      //             email,
-      //             username: login,
-      //             password: hash,
-      //             userId,
-      //           });
-      //         }
-      //       );
-      //     }
-      //   );
-      // });
+      process.nextTick(function () {
+        const { id, login } = profile._json;
+        const email =
+          profile._json.company ||
+          profile._json.email ||
+          profile._json.blog ||
+          login;
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(id.toString(), salt);
+        const userId = uuid();
+        db.query(
+          `SELECT * FROM users WHERE email = ?`,
+          [email],
+          (err, result) => {
+            if (err) {
+              return done(err);
+            }
+            if (result.length > 0) {
+              return done(err, result[0]);
+            }
+            db.query(
+              "INSERT INTO users (`email`, `username`, `password`, `userId`) VALUES (?, ?, ?, ?)",
+              [email, login, hash, userId],
+              (err, result) => {
+                if (err) {
+                  return done(err);
+                }
+                return done(err, {
+                  email,
+                  username: login,
+                  password: hash,
+                  userId,
+                });
+              }
+            );
+          }
+        );
+      });
     }
   )
 );

@@ -8,9 +8,9 @@ const oAuth2Client = new google.auth.OAuth2(
   process.env.CLEINT_SECRET,
   process.env.REDIRECT_URI
 );
-oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN });
 
-const sendMail = asyncWrapper(async (email) => {
+const sendMail = asyncWrapper(async (email, userId) => {
   try {
     const accessToken = await oAuth2Client.getAccessToken();
 
@@ -28,9 +28,9 @@ const sendMail = asyncWrapper(async (email) => {
 
     const mailOptions = {
       from: "JohnnyOhms <Johnchinweike08@gmail.com>",
-      to: "to email address here",
+      to: email,
       subject: "Reset your password",
-      text: `https://localhost:9000/auth/resetpass?userId=&token=`,
+      text: `https://localhost:9000/auth/resetpassword?userId=${userId}`,
       html: "<h2>Link to reset to email</h2>",
     };
 

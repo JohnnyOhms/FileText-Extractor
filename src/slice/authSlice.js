@@ -1,16 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../utils/api";
+import axios from "axios";
 
 export const fetchUserData = createAsyncThunk(
   "auth/fetchUserData",
-  async (req, { rejectWithValue }) => {
+  async (req, thunkAPI) => {
     const { url, body } = req;
-    try {
-      const response = await api.get(url, { body }, { method: "POST" });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
-    }
+    const response = await axios.post(
+      `http://localhost:9000/api/auth/${url}`,
+      body
+    );
+    localStorage.setItem("Token_Key", JSON.stringify(response.data.token));
+    return response.data;
   }
 );
 

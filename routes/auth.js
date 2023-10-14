@@ -7,28 +7,26 @@ const {
   signTokenOauth,
 } = require("../controllers/auth");
 const passport = require("passport");
-const { JwtToken } = require("../config/util");
-const path = require("path");
 
+Router.route("/register").post(Register);
+Router.route("/login").post(login);
+Router.route("/forgotpassword").post(forgotPassword);
 Router.route("/signTokenOauth").get(signTokenOauth);
-Router.route("/auth/register").post(Register);
-Router.route("/auth/login").post(login);
-Router.route("/auth/google").get(
+Router.route("/google").get(
   passport.authenticate("google", { scope: ["email", "profile"] })
 );
-Router.route("/auth/google/callback").get(
+Router.route("/google/callback").get(
   passport.authenticate("google", {
     failureRedirect: "/",
-    successRedirect: "/api/signTokenOauth",
+    successRedirect: "/api/auth/signTokenOauth",
   })
 );
-Router.route("/auth/twitter").get(passport.authenticate("twitter"));
-Router.route("/auth/twitter/callback").get(
+Router.route("/twitter").get(passport.authenticate("twitter"));
+Router.route("/twitter/callback").get(
   passport.authenticate("twitter", {
     failureRedirect: "/",
-    successRedirect: "/api/signTokenOauth",
+    successRedirect: "/api/auth/signTokenOauth",
   })
 );
-Router.route("/forgetpassword").post(forgotPassword);
 
 module.exports = Router;

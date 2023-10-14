@@ -18,7 +18,7 @@ const Result = styled(Paper)(({ theme }) => ({
   overflowY: "scroll",
 }));
 
-export const ResultText = () => {
+export const ResultText = ({ text }) => {
   const dispatch = useDispatch();
   return (
     <Box
@@ -66,7 +66,7 @@ export const ResultText = () => {
           <p style={{ marginRight: "10px", fontSize: "12px" }}>Copy</p>
           <p style={{ marginRight: "10px", fontSize: "12px" }}>Save</p>
         </div>
-        <Result></Result>
+        <Result>{text}</Result>
       </Paper>
     </Box>
   );

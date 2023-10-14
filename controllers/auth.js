@@ -2,9 +2,10 @@ const db = require("../config/db");
 const statusCode = require("http-status");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
-const { BadRequestError } = require("../errors");
+const { BadRequestError, UnauthorizedError } = require("../errors");
 const { JwtToken } = require("../config/util");
 const Passport = require("passport");
+const sendMail = require("../config/sendmail");
 
 const Register = (req, res, next) => {
   const { username, email, password } = req.body;
@@ -36,7 +37,6 @@ const Register = (req, res, next) => {
           if (err) {
             return next(new BadRequestError("Failed to create an account"));
           }
-          req.session.user = { ...req.body, userId };
           return res
             .status(statusCode.CREATED)
             .json({ success: true, mssg: "user created", username, token });
@@ -47,18 +47,17 @@ const Register = (req, res, next) => {
 };
 
 const login = (req, res, next) => {
-  Passport.authenticate("local", { session: true }, (err, user, info) => {
+  Passport.authenticate("local", { session: false }, (err, user, info) => {
     if (err || !user) {
       return res.status(400).json({
-        message: info ? info.message : "Login failed",
+        message: "Login failed",
         user: user,
       });
     }
-    req.login(user, { session: true }, (err) => {
+    req.login(user, { session: false }, (err) => {
       if (err) {
         return next(new BadRequestError("something went wrong"));
       }
-      req.session.user = user;
       const token = JwtToken.signToken({
         userId: user.userId,
         email: user.email,
@@ -82,6 +81,32 @@ const signTokenOauth = (req, res, next) => {
   return res.status(statusCode.CREATED).json({ success: true, user, token });
 };
 
-const forgotPassword = (req, res, next) => {};
+const forgotPassword = (req, res, next) => {
+  const { email } = req.body;
+  if (!email) {
+    return next(new BadRequestError("Provide email to reset password"));
+  }
+  db.query("SELECT * FROM users WHERE email = ?", [email], (err, result) => {
+    if (err) {
+      return next(new BadRequestError("something went wrong"));
+    }
+    if (!result) {
+      return res
+        .status(statusCode.UNAUTHORIZED)
+        .send({ err: "Email not registered on this app " });
+    }
+    const userId = result[0].userId;
+    sendMail(email, userId)
+      .then((res) => {
+        return res
+          .status(200)
+          .json({ success: true, mssg: "mail sent, check your email", result });
+      })
+      .catch((err) => {
+        return console.log(err);
+        next(new BadRequestError("something went wrong"));
+      });
+  });
+};
 
 module.exports = { Register, forgotPassword, login, signTokenOauth };

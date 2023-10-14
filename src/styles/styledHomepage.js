@@ -18,7 +18,7 @@ export const IntroSection = styled.div`
   margin: auto 0 auto 20rem;
   padding: 1rem;
   height: 80vh;
-  width: 35vw;
+  width: 50vw;
   word-wrap: break-word;
 
   @media (max-width: 600px) {
@@ -35,9 +35,10 @@ export const IntroSection = styled.div`
 export const IntroHeader = styled.h1`
   font-size: 3.2rem;
   font-family: "Lucida Sans", Arial, sans-serif, serif;
+  margin-bottom: 20px;
 
   @media (max-width: 600px) {
-    font-size: 2.5rem;
+    font-size: 1.9rem;
   }
 `;
 

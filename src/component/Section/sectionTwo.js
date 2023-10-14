@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SectionTwoDiv } from "../../styles/styledDashboard";
 import { Item } from "../../pages/dashboard";
 import styled from "@emotion/styled";
@@ -15,8 +15,11 @@ import FolderIcon from "@mui/icons-material/Folder";
 import DeleteIcon from "@mui/icons-material/Delete";
 import ArticleIcon from "@mui/icons-material/Article";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { openResult } from "../../slice/globalSlice";
+import { loadTextData } from "../../slice/LoadtextSlice";
+import { Loading } from "../Loader/Loading";
+import Spinner from "../Loader/Spinner";
 
 const Profile = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -48,6 +51,20 @@ const Demo = styled("div")(({ theme }) => ({
 
 export const SectionTwo = ({ scrollRef }) => {
   const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const savedText = useSelector((state) => state.loadText.data);
+  const loading = useSelector((state) => state.loadText.loading);
+  const error = useSelector((state) => state.loadText.error);
+  const [saved, setSaved] = useState([]);
+
+  // useEffect(() => {
+  //   dispatch(loadTextData({ url: "getalltext" }));
+  // }, [dispatch]);
+
+  useEffect(() => {
+    setSaved((prev) => [...prev, savedText]);
+  }, [savedText]);
+
   return (
     <SectionTwoDiv ref={scrollRef}>
       <Item variant="outlined">
@@ -63,10 +80,10 @@ export const SectionTwo = ({ scrollRef }) => {
             }}
           >
             <Typography variant="body2" sx={{ fontSize: "17px" }}>
-              New_user
+              {user && user.user.username}
             </Typography>
             <Typography variant="body2">
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={0} color="error">
                 <NotificationsIcon sx={{ fontSize: "30px" }} />
               </Badge>
             </Typography>
@@ -76,26 +93,31 @@ export const SectionTwo = ({ scrollRef }) => {
           <Demo>
             <List>
               <ListItem>
-                <ListItemAvatar>
-                  <ListItemIcon>
-                    <FolderIcon />
-                  </ListItemIcon>
-                </ListItemAvatar>
-                <ListItemText primary="Single-line item" />
-                <React.Fragment>
-                  <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
-                    <DeleteIcon sx={{ fontSize: "30px" }} />
-                  </IconButton>
-                  <IconButton
-                    onClick={() => dispatch(openResult())}
-                    sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}
-                  >
-                    <ArticleIcon sx={{ fontSize: "30px" }} />
-                  </IconButton>
-                  <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
-                    <ContentCopyIcon sx={{ fontSize: "30px" }} />
-                  </IconButton>
-                </React.Fragment>
+                {loading && <Loading />}
+                {/* {saved.map((item) => { */}
+                <>
+                  <ListItemAvatar>
+                    <ListItemIcon>
+                      <FolderIcon />
+                    </ListItemIcon>
+                  </ListItemAvatar>
+                  <ListItemText primary="Single-line item" />
+                  <React.Fragment>
+                    <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                      <DeleteIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => dispatch(openResult())}
+                      sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}
+                    >
+                      <ArticleIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                    <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                      <ContentCopyIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                  </React.Fragment>
+                </>
+                {/* })} */}
               </ListItem>
             </List>
           </Demo>

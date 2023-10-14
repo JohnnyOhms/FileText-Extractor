@@ -11,6 +11,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import TwitterIcon from "@mui/icons-material/Twitter";
 import MenuIcon from "@mui/icons-material/Menu";
 import { blue } from "@mui/material/colors";
+import { Link } from "react-router-dom";
 
 export const NavBar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -81,16 +82,18 @@ export const NavBar = () => {
         </IconButton>
         <p>About Me</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <LoginIcon />
-        </IconButton>
-        <p>Login</p>
-      </MenuItem>
+      <Link to="/login" style={{ textDecoration: "none", color: "black" }}>
+        <MenuItem>
+          <IconButton
+            size="large"
+            aria-label="show 17 new notifications"
+            color="inherit"
+          >
+            <LoginIcon />
+          </IconButton>
+          Login
+        </MenuItem>
+      </Link>
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -131,12 +134,20 @@ export const NavBar = () => {
               </IconButton>
               About
             </Typography>
-            <Typography variant="h6" sx={{ margin: "0 7px", fontSize: "17px" }}>
-              <IconButton size="small" color="inherit">
-                <LoginIcon fontSize="16px" />
-              </IconButton>
-              Login
-            </Typography>
+            <Link
+              to="/login"
+              style={{ textDecoration: "none", color: "black" }}
+            >
+              <Typography
+                variant="h6"
+                sx={{ margin: "0 7px", fontSize: "17px" }}
+              >
+                <IconButton size="small" color="inherit">
+                  <LoginIcon fontSize="16px" />
+                </IconButton>
+                Login
+              </Typography>
+            </Link>
             <Typography
               variant="h6"
               sx={{

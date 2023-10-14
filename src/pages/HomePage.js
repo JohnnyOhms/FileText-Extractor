@@ -9,7 +9,8 @@ import {
   IntroWrapper,
   StartWrapper,
 } from "../styles/styledHomepage";
-import { TypewriterEffect } from "../component/TypeWriterEffect";
+import { TypewriterEffect } from "../component/TypeWriter/TypeWriterEffect";
+import { Link } from "react-router-dom";
 
 export const HomePage = () => {
   return (
@@ -17,7 +18,7 @@ export const HomePage = () => {
       <IntroWrapper className="wrapper">
         <IntroSection>
           <IntroHeader>
-            Fastest way to
+            Fastest way to Extract
             <TypewriterEffect />
           </IntroHeader>
           <Typography variant="body1">
@@ -31,27 +32,40 @@ export const HomePage = () => {
 
           <StartWrapper>
             <IntroStartBtn>
+              <Link
+                to="/dashboard"
+                style={{ textDecoration: "none", color: "white" }}
+              >
+                <Typography
+                  variant="body2"
+                  sx={{ margin: "auto", fontSize: "15px", textAlign: "center" }}
+                >
+                  Get Started for free
+                </Typography>
+              </Link>
+            </IntroStartBtn>
+            <a
+              id="source-code"
+              href="https://github.com/JohnnyOhms/FileText-Extractor/"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none" }}
+            >
               <Typography
                 variant="body2"
-                sx={{ margin: "auto", fontSize: "20px" }}
+                sx={{
+                  fontSize: "15px",
+                  margin: "auto 0 auto 7px",
+                  color: "#106dd8",
+                  fontWeight: "800",
+                }}
               >
-                Get Started for free
+                view source code
+                <GitHubIcon
+                  sx={{ margin: " auto 8px", fontSize: "20px", color: "black" }}
+                />{" "}
               </Typography>
-            </IntroStartBtn>
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: "19px",
-                margin: "auto 0 auto 7px",
-                color: "#106dd8",
-                fontWeight: "800",
-              }}
-            >
-              view source code{" "}
-              <GitHubIcon
-                sx={{ margin: " auto 8px", fontSize: "20px", color: "black" }}
-              />{" "}
-            </Typography>
+            </a>
           </StartWrapper>
         </IntroSection>
       </IntroWrapper>

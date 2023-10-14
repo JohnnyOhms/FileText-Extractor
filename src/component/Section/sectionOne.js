@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import {
   BaseContainer,
   CameraLabel,
@@ -16,10 +16,16 @@ import { Item } from "../../pages/dashboard";
 import styled from "@emotion/styled";
 import { blue } from "@mui/material/colors";
 import { useDispatch, useSelector } from "react-redux";
-import { openCamera } from "../../slice/globalSlice";
-import { FileUpload } from "../FileUpload/FileUpload";
+import {
+  addFileData,
+  addText,
+  displayFile,
+  openCamera,
+  openResult,
+} from "../../slice/globalSlice";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import api from "../../utils/api";
 
 const FileItem = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -30,7 +36,7 @@ const FileItem = styled(Paper)(({ theme }) => ({
   display: "flex",
   flexDirection: "column",
 }));
-const FileItem_2 = styled(Paper)(({ theme }) => ({
+const FileItem2 = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   color: theme.palette.text.secondary,
   height: { sm: "20%", md: "20%", xs: "7%" },
@@ -43,28 +49,48 @@ const FileItem_2 = styled(Paper)(({ theme }) => ({
 
 export const SectionOne = ({ scrollRef }) => {
   const filePreview = useSelector((state) => state.global.displayFile);
+  const fileData = useSelector((state) => state.global.fileData);
   const dispatch = useDispatch();
-  const inputFileRef = useRef(null);
-  const [fileName, setFileName] = useState("");
-  const [showComponent, setShowComponent] = useState(false);
 
-  const handleCamera = () => {
-    dispatch(openCamera());
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append("imgUpload", file);
+
+      api
+        .post("upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data", // Important for file uploads
+          },
+        })
+        .then((res) => {
+          dispatch(addFileData(file));
+          dispatch(displayFile());
+        })
+        .catch((err) => console.log("ErrorMssg:" + err));
+    }
   };
 
-  const ImageFile = () => {
-    setFileName("image/png, image/gif, image/jpeg, image/jpg");
-    inputFileRef.current.click();
+  const handleButtonClick = (newAcceptedFileType) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = newAcceptedFileType;
+    input.style.display = "none";
+    input.addEventListener("change", handleFileChange);
+    document.body.appendChild(input);
+    input.click();
+    document.body.removeChild(input);
   };
 
-  const PdfFile = () => {
-    setFileName("application/pdf");
-    inputFileRef.current.click();
-  };
-
-  const DocxFile = () => {
-    setFileName(".docx");
-    inputFileRef.current.click();
+  const extractText = () => {
+    api
+      .post("extract")
+      .then((res) => {
+        dispatch(openResult());
+        dispatch(addText(res.data.text));
+      })
+      .catch((err) => console.log(err));
   };
 
   return (
@@ -82,7 +108,7 @@ export const SectionOne = ({ scrollRef }) => {
             }}
           >
             <span
-              onClick={handleCamera}
+              onClick={() => dispatch(openCamera())}
               style={{
                 background: "#1976d2",
                 margin: " auto auto 0 auto",
@@ -100,7 +126,7 @@ export const SectionOne = ({ scrollRef }) => {
               ></CameraAltIcon>
             </span>
             <span
-              onClick={ImageFile}
+              onClick={() => handleButtonClick("image/*")}
               style={{
                 background: "#1976d2",
                 margin: "auto auto 0 auto",
@@ -109,7 +135,6 @@ export const SectionOne = ({ scrollRef }) => {
                 display: "flex",
               }}
             >
-              <FileUpload fileRef={inputFileRef} fileType={fileName} />;
               <CollectionsIcon
                 sx={{
                   color: "white",
@@ -130,7 +155,7 @@ export const SectionOne = ({ scrollRef }) => {
           </div>
         </FileItem>
         {/* start */}
-        <FileItem_2>
+        <FileItem2>
           <div
             style={{
               height: "100%",
@@ -141,7 +166,7 @@ export const SectionOne = ({ scrollRef }) => {
             }}
           >
             <span
-              onClick={PdfFile}
+              onClick={() => handleButtonClick("application/pdf")}
               style={{
                 background: "grey",
                 margin: " auto auto 0 auto",
@@ -159,7 +184,7 @@ export const SectionOne = ({ scrollRef }) => {
               />
             </span>
             <span
-              onClick={DocxFile}
+              onClick={() => handleButtonClick(".docx")}
               style={{
                 background: "grey",
                 margin: "auto auto 0 auto",
@@ -186,7 +211,7 @@ export const SectionOne = ({ scrollRef }) => {
             <PDFLabel> PDF</PDFLabel>
             <DOCXLabel> DOCX</DOCXLabel>
           </div>
-        </FileItem_2>
+        </FileItem2>
         {/* end */}
         <div
           style={{
@@ -216,7 +241,7 @@ export const SectionOne = ({ scrollRef }) => {
                   }}
                 />
                 <Typography variant="body2" sx={{ mt: "30px" }}>
-                  image.jpg
+                  {fileData[0].name}
                 </Typography>
 
                 <BaseContainer>
@@ -231,6 +256,7 @@ export const SectionOne = ({ scrollRef }) => {
                       // padding: "0 10px",
                       borderRadius: "10px",
                     }}
+                    onClick={extractText}
                   >
                     Extract
                   </Button>

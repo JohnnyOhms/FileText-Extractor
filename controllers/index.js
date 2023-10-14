@@ -3,12 +3,12 @@ const Tesseract = require("tesseract.js");
 const fs = require("node:fs");
 const db = require("../config/db");
 const uuid = require("uuid");
-const { BadRequestError, UnautorizedError } = require("../errors");
+const { BadRequestError, UnauthorizedError } = require("../errors");
 
 const extractText = (req, res, next) => {
-  const user = req.session.user;
+  const user = req.user;
   if (!user) {
-    return next(new UnautorizedError("unauthorized to extract"));
+    return next(new UnauthorizedError("unauthorized to extract"));
   }
   const id = user.userId;
   db.query(`SELECT * FROM uploads WHERE userId = ?`, [id], (err, result) => {
@@ -27,14 +27,13 @@ const extractText = (req, res, next) => {
 };
 
 const uploadFile = (req, res, next) => {
-  const user = req.session.user;
+  const user = req.user;
   if (!user) {
-    return next(new UnautorizedError("sign in to upload file"));
+    return next(new UnauthorizedError("sign in to upload file"));
   }
-  let id = req.session.user.userId.toString(),
+  let id = req.user.userId.toString(),
     file = req.file.filename.toString();
-
-  db.query("SELECT * FROM uploads WHERE userID = ?", [id], (err, result) => {
+  db.query("SELECT * FROM uploads WHERE userId = ?", [id], (err, result) => {
     if (err) {
       return next(new BadRequestError("failed to load data"));
     }
@@ -70,9 +69,9 @@ const uploadFile = (req, res, next) => {
 };
 
 const getAllText = (req, res, next) => {
-  const user = req.session.user;
+  const user = req.user;
   if (!user) {
-    return next(new UnautorizedError("unauthorized to load data"));
+    return next(new UnauthorizedError("unauthorized to load data"));
   }
   const userId = user.userId;
   db.query(
@@ -84,7 +83,7 @@ const getAllText = (req, res, next) => {
       }
       if (result <= 0) {
         return res
-          .statusCode(statusCode.OK)
+          .status(statusCode.OK)
           .json({ success: true, mssg: "no saved text found" });
       }
       return res.status(statusCode.OK).json({ sucess: true, data: result[0] });
@@ -93,9 +92,9 @@ const getAllText = (req, res, next) => {
 };
 
 const saveText = (req, res, next) => {
-  const user = req.session.user;
+  const user = req.user;
   if (!user) {
-    return next(new UnautorizedError("unauthorized to save text"));
+    return next(new UnauthorizedError("unauthorized to save text"));
   }
   if (!req.body) {
     return next(new BadRequestError("provide text to save"));
@@ -118,11 +117,12 @@ const saveText = (req, res, next) => {
 };
 
 const deleteText = (req, res, next) => {
+  const user = req.user;
   if (!user) {
-    return next(new UnautorizedError("unauthorized to save text"));
+    return next(new UnauthorizedError("unauthorized to save text"));
   }
   if (!req.body) {
-    return next(new BadRequestError("provide text to save"));
+    return next(new BadRequestError("provide textId to delete"));
   }
   const userId = user.userId;
   const { textId } = req.body;
@@ -141,8 +141,9 @@ const deleteText = (req, res, next) => {
 };
 
 const deleteAllText = (req, res, next) => {
+  const user = req.user;
   if (!user) {
-    return next(new UnautorizedError("unauthorized to save text"));
+    return next(new UnauthorizedError("unauthorized to save text"));
   }
   const userId = user.userId;
   db.query(

@@ -10,13 +10,14 @@ const session = require("express-session");
 const db = require("./config/db");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
-const authorization = require("./middlewares/unauthorized");
+const authorization = require("./middlewares/authorization");
 const PORT = process.env.PORT || 9000;
 require("dotenv").config();
 require("./config/passport");
 
 const app = express();
 app.use(cors());
+app.use(express.json({ limit: "10mb" }));
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -37,20 +38,19 @@ app.use(
   })
 );
 
-app.use((req, res, next) => {
-  console.log(req.session);
-  // console.log(req.user);
-  next();
-});
-
 app.get("/", (req, res) => {
   res.status(statusCode.OK).send("Backend Server API");
 });
 
-app.use("/api/", Router);
-app.use("/api/", authRouter);
+app.use("/api/auth/", authRouter);
+app.use("/api/", authorization, Router);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
+
+app.use((req, res, next) => {
+  console.log(req.session);
+  next();
+});
 
 app.use(passport.initialize());
 app.use(passport.session());
