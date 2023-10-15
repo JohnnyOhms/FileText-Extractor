@@ -1,21 +1,62 @@
-import { Box, Button, IconButton, Paper } from "@mui/material";
+import { Avatar, Box, Button, IconButton, Paper } from "@mui/material";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import ClearIcon from "@mui/icons-material/Clear";
-import React, { useRef, useCallback, useState } from "react";
+import React, { useRef, useCallback, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import { blue, deepOrange } from "@mui/material/colors";
-import { openCamera } from "../../slice/globalSlice";
+import { addFileData, displayFile, openCamera } from "../../slice/globalSlice";
 import { useDispatch } from "react-redux";
+import api from "../../utils/api";
 
 export const CameraCapture = () => {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
   const dispatch = useDispatch();
 
-  const captureImage = useCallback(() => {
+  const captureImage = useCallback(async () => {
     const imageSrc = webcamRef.current.getScreenshot();
-    setImageSrc(imageSrc);
+    await setImageSrc(imageSrc);
+    await dispatch(openCamera());
   }, [webcamRef]);
+
+  const dataURItoBlob = (dataURI) => {
+    const byteString = atob(dataURI.split(",")[1]);
+    const mimeString = dataURI.split(",")[0].split(":")[1].split(";")[0];
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    return new Blob([ab], { type: mimeString });
+  };
+
+  useEffect(() => {
+    if (imageSrc) {
+      const blob = dataURItoBlob(imageSrc);
+
+      const imageFile = new File([blob], "capturedImage.jpg", {
+        type: "image/jpeg",
+      });
+      const formData = new FormData();
+      formData.append("imgUpload", imageFile);
+
+      api
+        .post("upload", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((res) => {
+          dispatch(
+            addFileData({
+              name: `capturedImage ~ ${new Date().toDateString()}`,
+            })
+          );
+          dispatch(displayFile());
+        })
+        .catch((err) => console.log("ErrorMssg:" + err));
+    }
+  }, [imageSrc]);
 
   return (
     <Box
