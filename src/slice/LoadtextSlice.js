@@ -21,7 +21,33 @@ const LoadTextSlice = createSlice({
     loading: false,
     error: null,
   },
-  reducers: {},
+  reducers: {
+    saveText: async (state, action) => {
+      if (action.payload) {
+        const res = await api.post("/savetext", action.payload);
+        loadTextData({ url: "getalltext" });
+        return res;
+      }
+    },
+    deleteText: async (state, action) => {
+      if (action.payload) {
+        const res = await api.post("/deletetext", action.payload);
+        await state.data.filter(
+          (item) => item.textId !== action.payload.textId
+        );
+        return res;
+      }
+    },
+    deleteAllText: async (state, action) => {
+      if (action.payload) {
+        const res = await api.post("deletealltext", action.payload);
+        for (let i = 0; i < state.data.length; i++) {
+          state.data.pop();
+        }
+        return res;
+      }
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(loadTextData.pending, (state) => {
@@ -38,5 +64,7 @@ const LoadTextSlice = createSlice({
       });
   },
 });
+
+export const saveText = LoadTextSlice.actions;
 
 export default LoadTextSlice.reducer;
