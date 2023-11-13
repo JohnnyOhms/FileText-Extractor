@@ -17,8 +17,7 @@ import ArticleIcon from "@mui/icons-material/Article";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { useDispatch, useSelector } from "react-redux";
 import { openResult } from "../../slice/globalSlice";
-import { loadTextData } from "../../slice/LoadtextSlice";
-import { Loading } from "../Loader/Loading";
+import { loadTextData } from "../../slice/textSlice";
 import Spinner from "../Loader/Spinner";
 
 const Profile = styled(Paper)(({ theme }) => ({
@@ -57,19 +56,30 @@ export const SectionTwo = ({ scrollRef }) => {
   const error = useSelector((state) => state.loadText.error);
   const [saved, setSaved] = useState([]);
 
-  // useEffect(() => {
-  //   dispatch(loadTextData({ url: "getalltext" }));
-  // }, [dispatch]);
-
   useEffect(() => {
-    setSaved((prev) => [...prev, savedText]);
+    if (!user) return;
+    dispatch(loadTextData({ url: "getalltext" }));
+  }, [dispatch, savedText]);
+
+  // useEffect(() => {
+  //   console.log(savedText);
+  //   if (savedText && savedText.mssg) return;
+
+  //   if (savedText) {
+  //     setSaved(savedText);
+  //   }
+  // }, [savedText]);
+  useEffect(() => {
+    console.log(savedText);
   }, [savedText]);
 
   return (
     <SectionTwoDiv ref={scrollRef}>
       <Item variant="outlined">
         <Profile variant="outlined">
-          <Avatar sx={{ bgcolor: blue[700] }}>N</Avatar>
+          <Avatar sx={{ bgcolor: blue[700] }}>
+            {user && user.user.username[0]}
+          </Avatar>
           <div
             style={{
               width: "100%",
@@ -83,7 +93,7 @@ export const SectionTwo = ({ scrollRef }) => {
               {user && user.user.username}
             </Typography>
             <Typography variant="body2">
-              <Badge badgeContent={0} color="error">
+              <Badge badgeContent={6} color="error">
                 <NotificationsIcon sx={{ fontSize: "30px" }} />
               </Badge>
             </Typography>
@@ -92,32 +102,43 @@ export const SectionTwo = ({ scrollRef }) => {
         <ProfileDetails variant="outlined">
           <Demo>
             <List>
-              <ListItem>
-                {loading && <Loading />}
-                {/* {saved.map((item) => { */}
-                <>
-                  <ListItemAvatar>
-                    <ListItemIcon>
-                      <FolderIcon />
-                    </ListItemIcon>
-                  </ListItemAvatar>
-                  <ListItemText primary="Single-line item" />
-                  <React.Fragment>
-                    <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
-                      <DeleteIcon sx={{ fontSize: "30px" }} />
-                    </IconButton>
-                    <IconButton
-                      onClick={() => dispatch(openResult())}
-                      sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}
-                    >
-                      <ArticleIcon sx={{ fontSize: "30px" }} />
-                    </IconButton>
-                    <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
-                      <ContentCopyIcon sx={{ fontSize: "30px" }} />
-                    </IconButton>
-                  </React.Fragment>
-                </>
-                {/* })} */}
+              <ListItem sx={{ display: "block", textAlign: "center" }}>
+                {loading ? (
+                  <Spinner />
+                ) : savedText && savedText.data.length > 0 ? (
+                  savedText.data.map((item) => (
+                    <>
+                      <ListItem>
+                        <ListItemAvatar>
+                          <ListItemIcon>
+                            <FolderIcon />
+                          </ListItemIcon>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={item.text.substring(0, 30) + "....."}
+                        />
+                        <React.Fragment>
+                          <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                            <DeleteIcon sx={{ fontSize: "30px" }} />
+                          </IconButton>
+                          <IconButton
+                            onClick={() => dispatch(openResult())}
+                            sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}
+                          >
+                            <ArticleIcon sx={{ fontSize: "30px" }} />
+                          </IconButton>
+                          <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                            <ContentCopyIcon sx={{ fontSize: "30px" }} />
+                          </IconButton>
+                        </React.Fragment>
+                      </ListItem>
+                    </>
+                  ))
+                ) : (
+                  <p style={{ fontSize: "20px" }}>
+                    Nothing to display. "sign in or save new text"
+                  </p>
+                )}
               </ListItem>
             </List>
           </Demo>
