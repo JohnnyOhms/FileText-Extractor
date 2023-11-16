@@ -8,6 +8,7 @@ const initialState = {
   top: true,
   bottom: false,
   extractedText: "",
+  count: 0,
 };
 
 const globalSlice = createSlice({
@@ -42,6 +43,9 @@ const globalSlice = createSlice({
         state.extractedText = action.payload;
       }
     },
+    reRenderComponent: (state, action) => {
+      state.count++;
+    },
   },
 });
 
@@ -53,6 +57,7 @@ export const {
   topBtn,
   bottomBtn,
   addText,
+  reRenderComponent,
 } = globalSlice.actions;
 
 export default globalSlice.reducer;
