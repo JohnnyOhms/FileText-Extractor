@@ -3,9 +3,8 @@ import { SectionTwoDiv } from "../../styles/styledDashboard";
 import { Item } from "../../pages/dashboard";
 import styled from "@emotion/styled";
 import { Avatar, Badge, Paper, Typography } from "@mui/material";
-import { blue } from "@mui/material/colors";
+import { orange } from "@mui/material/colors";
 import NotificationsIcon from "@mui/icons-material/Notifications";
-import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -19,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { openResult } from "../../slice/globalSlice";
 import { loadTextData } from "../../slice/textSlice";
 import Spinner from "../Loader/Spinner";
+import api from "../../utils/api";
 
 const Profile = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -41,14 +41,7 @@ const ProfileDetails = styled(Paper)(({ theme }) => ({
   lineHeight: "60px",
 }));
 
-const Demo = styled("div")(({ theme }) => ({
-  backgroundColor: theme.palette.background.paper,
-  width: "100%",
-  height: "100%",
-  overflowY: "scroll",
-}));
-
-export const SectionTwo = ({ scrollRef }) => {
+export const SectionTwo = ({ scrollRef, count }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const savedText = useSelector((state) => state.loadText.data);
@@ -58,26 +51,31 @@ export const SectionTwo = ({ scrollRef }) => {
 
   useEffect(() => {
     if (!user) return;
-    dispatch(loadTextData({ url: "getalltext" }));
-  }, [dispatch, savedText]);
+    api
+      .get("http://localhost:9000/api/getalltext")
+      .then((res) => {
+        setSaved(res.data.data);
+      })
+      .catch((err) => {
+        alert("something went wrong, refreash page");
+        console.log(err);
+      });
+  }, [count, user]);
 
-  // useEffect(() => {
-  //   console.log(savedText);
-  //   if (savedText && savedText.mssg) return;
-
-  //   if (savedText) {
-  //     setSaved(savedText);
-  //   }
-  // }, [savedText]);
   useEffect(() => {
-    console.log(savedText);
-  }, [savedText]);
+    console.log("dispatch action");
+    if (!user) return;
+    dispatch(loadTextData({ url: "getalltext" }));
+  }, [dispatch, user]);
 
   return (
     <SectionTwoDiv ref={scrollRef}>
-      <Item variant="outlined">
+      <Item
+        variant="outlined"
+        sx={{ display: "flex", flexDirection: "column" }}
+      >
         <Profile variant="outlined">
-          <Avatar sx={{ bgcolor: blue[700] }}>
+          <Avatar sx={{ bgcolor: orange[800] }}>
             {user && user.user.username[0]}
           </Avatar>
           <div
@@ -92,56 +90,104 @@ export const SectionTwo = ({ scrollRef }) => {
             <Typography variant="body2" sx={{ fontSize: "17px" }}>
               {user && user.user.username}
             </Typography>
+            {/* checks how many times the component is rendered */}
+            <p style={{ visibility: "hidden" }}>{count}</p>
+            {/*  */}
             <Typography variant="body2">
-              <Badge badgeContent={6} color="error">
+              <Badge
+                badgeContent={
+                  (savedText && savedText.data.length) ||
+                  (saved && saved.length)
+                }
+                color="warning"
+              >
                 <NotificationsIcon sx={{ fontSize: "30px" }} />
               </Badge>
             </Typography>
           </div>
         </Profile>
-        <ProfileDetails variant="outlined">
-          <Demo>
-            <List>
-              <ListItem sx={{ display: "block", textAlign: "center" }}>
-                {loading ? (
-                  <Spinner />
-                ) : savedText && savedText.data.length > 0 ? (
-                  savedText.data.map((item) => (
-                    <>
-                      <ListItem>
-                        <ListItemAvatar>
-                          <ListItemIcon>
-                            <FolderIcon />
-                          </ListItemIcon>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={item.text.substring(0, 30) + "....."}
-                        />
-                        <React.Fragment>
-                          <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
-                            <DeleteIcon sx={{ fontSize: "30px" }} />
-                          </IconButton>
-                          <IconButton
-                            onClick={() => dispatch(openResult())}
-                            sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}
-                          >
-                            <ArticleIcon sx={{ fontSize: "30px" }} />
-                          </IconButton>
-                          <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
-                            <ContentCopyIcon sx={{ fontSize: "30px" }} />
-                          </IconButton>
-                        </React.Fragment>
-                      </ListItem>
-                    </>
-                  ))
-                ) : (
-                  <p style={{ fontSize: "20px" }}>
-                    Nothing to display. "sign in or save new text"
-                  </p>
-                )}
-              </ListItem>
-            </List>
-          </Demo>
+        <ProfileDetails variant="outlined" sx={{ overflowY: "scroll" }}>
+          {/* first render */}
+          {loading ? (
+            <Spinner />
+          ) : (
+            savedText &&
+            savedText.data.length > 0 &&
+            savedText.data.map((item, index) => (
+              <div key={index + 1}>
+                <ListItem>
+                  <ListItemAvatar>
+                    <ListItemIcon>
+                      <FolderIcon />
+                    </ListItemIcon>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.text.substring(0, 30) + "....."}
+                  />
+                  <React.Fragment>
+                    <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                      <DeleteIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => dispatch(openResult())}
+                      sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}
+                    >
+                      <ArticleIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                    <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                      <ContentCopyIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                  </React.Fragment>
+                </ListItem>
+              </div>
+            ))
+          )}
+          {/*  */}
+          {/* alternative render*/}
+          {!savedText &&
+            saved &&
+            saved.length > 0 &&
+            saved.map((item, index) => (
+              <div key={index + 1}>
+                <ListItem>
+                  <ListItemAvatar>
+                    <ListItemIcon>
+                      <FolderIcon />
+                    </ListItemIcon>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.text.substring(0, 30) + "....."}
+                  />
+                  <React.Fragment>
+                    <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                      <DeleteIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => dispatch(openResult())}
+                      sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}
+                    >
+                      <ArticleIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                    <IconButton sx={{ mx: { xs: "1px", sm: 1, md: 1 } }}>
+                      <ContentCopyIcon sx={{ fontSize: "30px" }} />
+                    </IconButton>
+                  </React.Fragment>
+                </ListItem>
+              </div>
+            ))}
+          {/*  */}
+          {/* no results */}
+          {!savedText && saved.length <= 0 && (
+            <p style={{ fontSize: "20px" }}>
+              Nothing to display. "sign in or save new text"
+            </p>
+          )}
+          {/*  */}
+          {error && (
+            <p style={{ fontSize: "20px" }}>
+              failed to load. "try again later"
+            </p>
+          )}
         </ProfileDetails>
       </Item>
     </SectionTwoDiv>
