@@ -31,13 +31,14 @@ export const Dashboard = () => {
   const dispatch = useDispatch();
   const sectionOneScrollRef = useRef(null);
   const sectionTwoScrollRef = useRef(null);
+  const count = useSelector((state) => state.global.count);
 
   return (
     <Stack sx={{ height: "100%", width: "100%" }}>
       <NavBar />
       <DashboardWraper>
         <SectionOne scrollRef={sectionOneScrollRef} />
-        <SectionTwo scrollRef={sectionTwoScrollRef} />
+        <SectionTwo scrollRef={sectionTwoScrollRef} count={count} />
       </DashboardWraper>
       <>
         {openCamera || openResult ? (

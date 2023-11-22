@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   BaseContainer,
   CameraLabel,
@@ -25,8 +25,10 @@ import {
 } from "../../slice/globalSlice";
 import DocumentScannerIcon from "@mui/icons-material/DocumentScanner";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
-import api from "../../utils/api";
+
 import Spinner from "../Loader/Spinner";
+import { useNavigate } from "react-router-dom";
+import api from "../../utils/api";
 
 const FileItem = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -52,7 +54,9 @@ export const SectionOne = ({ scrollRef }) => {
   const filePreview = useSelector((state) => state.global.displayFile);
   const fileData = useSelector((state) => state.global.fileData);
   const [showSpinner, setShowSpinner] = useState(false);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -67,6 +71,7 @@ export const SectionOne = ({ scrollRef }) => {
           },
         })
         .then((res) => {
+          console.log(file);
           dispatch(addFileData(file));
           dispatch(displayFile());
         })
@@ -75,6 +80,10 @@ export const SectionOne = ({ scrollRef }) => {
   };
 
   const handleButtonClick = (newAcceptedFileType) => {
+    if (!user) {
+      alert("sign in to extract text");
+      return navigate("/login");
+    }
     const input = document.createElement("input");
     input.type = "file";
     input.accept = newAcceptedFileType;

@@ -12,6 +12,7 @@ import TwitterIcon from "@mui/icons-material/Twitter";
 import MenuIcon from "@mui/icons-material/Menu";
 import { blue } from "@mui/material/colors";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 export const NavBar = () => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -19,6 +20,8 @@ export const NavBar = () => {
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const user = useSelector((state) => state.auth.user);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -77,6 +80,20 @@ export const NavBar = () => {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
+        {user ? (
+          <>
+            <IconButton
+              size="small"
+              aria-label="show 4 new mails"
+              color="inherit"
+            >
+              👋
+            </IconButton>
+            <strong> {user.user.username}</strong>
+          </>
+        ) : null}
+      </MenuItem>
+      <MenuItem>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
           <TwitterIcon />
         </IconButton>
@@ -128,6 +145,14 @@ export const NavBar = () => {
           <Box sx={{ flexGrow: 1 }} />
 
           <Box sx={{ display: { xs: "none", md: "flex" }, cursor: "pointer" }}>
+            <Typography variant="h6" sx={{ margin: "0 7px", fontSize: "17px" }}>
+              {user ? (
+                <>
+                  {" "}
+                  Hello <strong> {user.user.username}</strong> 👋
+                </>
+              ) : null}
+            </Typography>
             <Typography variant="h6" sx={{ margin: "0 7px", fontSize: "17px" }}>
               <IconButton size="small" color="inherit">
                 <TwitterIcon fontSize="16px" sx={{ color: blue[500] }} />

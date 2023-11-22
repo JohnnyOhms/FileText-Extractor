@@ -5,15 +5,23 @@ import React, { useRef, useCallback, useState, useEffect } from "react";
 import Webcam from "react-webcam";
 import { blue, deepOrange } from "@mui/material/colors";
 import { addFileData, displayFile, openCamera } from "../../slice/globalSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import api from "../../utils/api";
 
 export const CameraCapture = () => {
   const webcamRef = useRef(null);
   const [imageSrc, setImageSrc] = useState(null);
+  const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const captureImage = useCallback(async () => {
+    if (!user) {
+      alert("sign in to capture image");
+      dispatch(openCamera());
+      return navigate("/login");
+    }
     const imageSrc = webcamRef.current.getScreenshot();
     await setImageSrc(imageSrc);
     await dispatch(openCamera());

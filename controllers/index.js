@@ -79,14 +79,16 @@ const getAllText = (req, res, next) => {
     [userId],
     (err, result) => {
       if (err) {
-        return next(new BadRequestError("failed to load data"));
+        return next(
+          new BadRequestError(err.sqlMessage + "failed to load data")
+        );
       }
       if (result <= 0) {
         return res
           .status(statusCode.OK)
           .json({ success: true, mssg: "no saved text found" });
       }
-      return res.status(statusCode.OK).json({ sucess: true, data: result[0] });
+      return res.status(statusCode.OK).json({ success: true, data: result });
     }
   );
 };
@@ -103,10 +105,12 @@ const saveText = (req, res, next) => {
   const userId = user.userId;
   const textId = uuid();
   db.query(
-    `INSERT INTO savedText (\`userId\`, \`text\`, \'DOC\', \'textId\') VALUES (?, ?, ?, ?)`,
+    "INSERT INTO savedtext (`userId`, `text`, `DOC`, `textId`) VALUES (?, ?, ?, ?)",
+
     [userId, text, date, textId],
     (err, result) => {
       if (err) {
+        console.log(err);
         return next(new BadRequestError("failed to add data"));
       }
       return res

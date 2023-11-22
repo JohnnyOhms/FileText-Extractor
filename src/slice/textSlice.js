@@ -25,7 +25,7 @@ const TextSlice = createSlice({
     saveText: async (state, action) => {
       if (action.payload) {
         try {
-          const res = await api.post("/savetexts", action.payload);
+          const res = await api.post("/savetext", action.payload);
           alert("text saved successfully");
           return res;
         } catch (error) {

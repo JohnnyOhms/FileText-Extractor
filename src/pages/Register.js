@@ -51,7 +51,7 @@ export function Register() {
     if (!email || !password || !comfirmPassword || !username) {
       return "Input Fields cannot be blank";
     }
-    if (password != comfirmPassword) {
+    if (password !== comfirmPassword) {
       return "Passwords does not match";
     }
 
